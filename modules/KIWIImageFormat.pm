@@ -1296,6 +1296,7 @@ sub createOVFConfiguration {
         }
     }
     KIWIQX::qxx ("mv $ovfdir $ovfdir.tmp");
+    KIWIQX::qxx ("mkdir -p $destdir");
     KIWIQX::qxx ("mv -f $ovfdir.tmp/* $destdir");
     KIWIQX::qxx ("rmdir $ovfdir.tmp");
     return $ovf;
