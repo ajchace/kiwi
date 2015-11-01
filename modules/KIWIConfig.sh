@@ -1474,20 +1474,22 @@ function suseStripKernel {
             #==========================================
             # check for weak-/updates and backup them
             #------------------------------------------
-            if [ -d $kversion/updates ];then
-                mv $kversion/updates /tmp
-            fi
+            stripdir=/tmp/stripped_modules
             if [ -d $kversion/weak-updates ];then
-                mv $kversion/weak-updates /tmp
+                mkdir -pv $stripdir$kversion
+                mv $kversion/weak-updates $stripdir$kversion
+            fi
+            if [ -d $kversion/updates ];then
+                mkdir -pv $stripdir$kversion
+                mv $kversion/updates $stripdir$kversion
             fi
             #==========================================
             # strip the modules but take care for deps
             #------------------------------------------
-            stripdir=/tmp/stripped_modules
             for mod in $(echo $kiwi_drivers | tr , ' '); do
-                local path=`/usr/bin/dirname $mod`
-                local base=`/usr/bin/basename $mod`
-                for d in kernel;do
+                local path=$(/usr/bin/dirname $mod)
+                local base=$(/usr/bin/basename $mod)
+                for d in "." kernel;do
                     if [ "$base" = "*" ];then
                         if test -d $kversion/$d/$path ; then
                             mkdir -pv $stripdir$kversion/$d/$path
@@ -1539,12 +1541,6 @@ function suseStripKernel {
             #------------------------------------------
             if [ -f /tmp/modules.order ];then
                 mv /tmp/modules.order $kversion
-            fi
-            if [ -d /tmp/updates ];then
-                mv /tmp/updates $kversion
-            fi
-            if [ -d /tmp/weak-updates ];then
-                mv /tmp/weak-updates $kversion
             fi
             #==========================================
             # run depmod
