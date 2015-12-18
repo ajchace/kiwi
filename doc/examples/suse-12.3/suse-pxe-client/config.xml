@@ -14,7 +14,7 @@
                     <partition type="L" number="2" size="image" mountpoint="/" target="true"/>
                     <partition type="L" number="3" target="false"/>
                 </partitions>
-                <union ro="/dev/sda2" rw="/dev/sda3" type="clicfs"/>
+                <union ro="/dev/sda2" rw="/dev/sda3" type="overlayfs"/>
             </pxedeploy>
         </type>
         <version>1.2.8</version>
