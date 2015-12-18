@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<<<<<<< HEAD:template/ix86/suse-SLE12-JeOS/config.xml
-<image schemaversion="6.1" name="LimeJeOS-SLE12">
-=======
-<image schemaversion="6.2" name="LimeJeOS-SLE12-Community">
->>>>>>> 06dd5df... Rename SLE JeOS descriptions:template/ix86/suse-SLE12-community-JeOS/config.xml
+<image schemaversion="6.1" name="LimeJeOS-SLE12-Community">
     <description type="system">
         <author>Marcus Schäfer</author>
         <contact>ms@novell.com</contact>
