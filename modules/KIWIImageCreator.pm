@@ -2118,6 +2118,15 @@ sub __addTypeToBootXML {
         $kiwi -> done();
     }
     #==========================================
+    # btrfs_root_is_snapshot
+    #------------------------------------------
+    my $btrfs_root_is_snapshot = $systemType -> getBtrfsRootIsSnapshot();
+    if ($btrfs_root_is_snapshot) {
+        $kiwi -> info ("--> btrfs_root_is_snapshot: $btrfs_root_is_snapshot");
+        $bootType -> setBtrfsRootIsSnapshot ($btrfs_root_is_snapshot);
+        $kiwi -> done();
+    }
+    #==========================================
     # fsmountoptions
     #------------------------------------------
     my $fsmountoptions = $systemType -> getFSMountOptions();
