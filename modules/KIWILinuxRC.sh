@@ -4158,7 +4158,7 @@ function probeDevices {
     #======================================
     # Manual loading of modules
     #--------------------------------------
-    for i in rd brd edd dm-mod xennet xenblk virtio_blk loop squashfs;do
+    for i in rd brd edd dm-mod xen:vif xen:vbd virtio_blk loop squashfs fuse;do
         modprobe $i &>/dev/null
     done
     udevPending
@@ -4678,6 +4678,11 @@ function searchBIOSBootDevice {
     # Check root variable
     #--------------------------------------
     if [ ! -z "$root" ];then
+        if [[ $root =~ "UUID=" ]];then
+            root=/dev/disk/by-uuid/$(echo $root | cut -f2 -d=)
+        elif [[ $root =~ "LABEL=" ]];then
+            root=/dev/disk/by-label/$(echo $root | cut -f2 -d=)
+        fi
         if ! waitForStorageDevice $root;then
             Echo "Specified root device $root not found. Found devices:"
             hwinfo --disk
@@ -6263,7 +6268,7 @@ function includeKernelParameters {
         if [ "$translate" = "lowercase" ];then
             kernelKey=`echo $kernelKey | tr [:upper:] [:lower:]`
         fi
-        kernelVal=$(echo $i | cut -f2 -d=)
+        kernelVal=$(echo $i | cut -f2- -d=)
         kernelVal=$(echo $kernelVal | sed -e 's/\o30/ /g')
         eval export $kernelKey=$kernelVal
     done
@@ -7313,7 +7318,7 @@ function waitForStorageDevice {
         if [ $check -eq 30 ];then
             return 1
         fi
-        Echo "Waiting for device $device to settle..."
+        Echo "Waiting for storage device $device to settle..."
         check=$((check + 1))
         sleep 2
     done
@@ -7358,7 +7363,7 @@ function waitForBlockDevice {
         if [ -b $device ] || [ $check -eq 4 ];then
             break
         fi
-        Echo "Waiting for device $device to settle..."
+        Echo "Waiting for block device $device to settle..."
         check=$((check + 1))
         sleep 2
     done
