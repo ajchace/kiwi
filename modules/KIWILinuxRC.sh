@@ -7432,17 +7432,6 @@ function bootImage {
 	#--------------------------------------
 	umount proc &>/dev/null && \
 	umount proc &>/dev/null
-	#======================================
-	# copy initrd to /run/initramfs
-	#--------------------------------------
-	mkdir -p /mnt/run/initramfs
-	for dir in /*;do
-		if [[ $dir =~ mnt|lost\+found|dev|boot|tmp|run|proc|sys ]];then
-			mkdir -p /mnt/run/initramfs/$dir
-			continue
-		fi
-		cp -a $dir /mnt/run/initramfs
-	done
 	if [ "$FSTYPE" = "zfs" ];then
 		#======================================
 		# setup shutdown script
@@ -7571,7 +7560,14 @@ function bootImage {
 		exec /lib/mkinitrd/bin/run-init -c ./dev/console /mnt $init $option
 	else
 		# FIXME: clicfs / nfsroot / non-suse doesn't like run-init
-		exec chroot . $init $option
+		if lookup switch_root &>/dev/null;then
+			exec switch_root . $init $option
+		else
+			if lookup pivot_root &>/dev/null;then
+				pivot_root . run/initramfs
+			fi
+			exec chroot . $init $option
+		fi
 	fi
 }
 #======================================
