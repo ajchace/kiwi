@@ -4840,14 +4840,6 @@ sub setupBootLoaderConfiguration {
             }
         }
         $FD -> close();
-        #==========================================
-        # copy grub2 config file to efi path too
-        #------------------------------------------
-        if (($firmware eq "efi") || ($firmware eq "uefi")) {
-            KIWIQX::qxx (
-                "cp $tmpdir/boot/$config/grub.cfg $tmpdir/EFI/BOOT 2>&1"
-            );
-        }
         $kiwi -> done();
     }
     #==========================================
