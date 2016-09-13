@@ -987,6 +987,9 @@ function installBootLoaderGrub2 {
 			#--------------------------------------
 			. /etc/default/grub
 			local timeout=10
+			local append
+			append="disk=$(getDiskID $imageDiskDevice)"
+			append="$append $KIWI_INITRD_PARAMS $KIWI_KERNEL_OPTIONS"
 			if [ ! -z "$KIWI_BOOT_TIMEOUT" ];then
 				timeout=$KIWI_BOOT_TIMEOUT
 			fi
@@ -1001,8 +1004,15 @@ function installBootLoaderGrub2 {
 				###Don't change this comment - YaST2 identifier: Original name: linux###
 				initrd = /boot/initrd
 				label  = linux
-				append = "$GRUB_CMDLINE_LINUX_DEFAULT"
+				append = "$append"
 				description = "$kiwi_oemtitle"
+				root = $(getDiskID $imageRootDevice)
+				image = /boot/vmlinuz
+				###Don't change this comment - YaST2 identifier: Original name: failsafe###
+				initrd = /boot/initrd
+				label = failsafe
+				append = "$append $failsafe"
+				description = "Failsafe -- $kiwi_oemtitle"
 				root = $(getDiskID $imageRootDevice)
 			EOF
             #====================================================
