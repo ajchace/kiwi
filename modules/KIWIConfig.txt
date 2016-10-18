@@ -52,6 +52,8 @@
 		<file name="cp"/>
 		<file name="cryptsetup"/>
 		<file name="curl"/>
+		<file name="curl.openssl0"/>
+		<file name="curl.openssl1"/>
 		<file name="cut"/>
 		<file name="dasd_configure"/>
 		<file name="dcounter"/>
