@@ -925,8 +925,16 @@ function baseUpdateSysConfig {
     local FILE=$1
     local VAR=$2
     local VAL=$3
-    local args=$(echo "s'@^\($VAR=\).*\$@\1\\\"$VAL\\\"@'")
-    eval sed -i $args $FILE
+    # Check if variable exists in file
+    if grep -q -E "^($VAR=)(.*)$" $FILE;then
+        # Update the value assigned to the variable
+        local args=$(echo "s'@^\($VAR=\).*\$@\1\\\"$VAL\\\"@'")
+        eval sed -i $args $FILE
+    else
+        # Append the variable and value at the end of the file
+        local args=$(echo "\$a\\$VAR=$VAL")
+        eval sed -i $args $FILE
+    fi
 }
 
 #======================================
